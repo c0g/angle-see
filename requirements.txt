@@ -1,0 +1,12 @@
+litellm
+python-dotenv
+Pillow
+matplotlib
+numpy
+pandas
+tabulate
+seaborn
+xhtml2pdf
+markdown
+PyPDF2
+diskcache
