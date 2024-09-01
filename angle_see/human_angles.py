@@ -1,15 +1,10 @@
-import numpy as np
-import itertools
 import json
-import io
+
+import numpy as np
 from dotenv import load_dotenv
-import base64
-
-from tqdm import tqdm
-
-from angle_see.general import encode_image, cached_completion
-from angle_see.generate_simple_angle import generate_line_intersection_image
 from matplotlib import pyplot as plt
+
+from angle_see.generate_simple_angle import generate_line_intersection_image
 
 load_dotenv()  # take environment variables from .env.
 
@@ -22,5 +17,5 @@ for _ in range(2):
         guessed_angle = float(input("Estimate the angle\n"))
         human.append((angle, guessed_angle))
 
-with open('human_angles.json', 'w') as f:
+with open("human_angles.json", "w") as f:
     json.dump(human, f)

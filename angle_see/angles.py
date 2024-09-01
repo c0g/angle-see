@@ -1,21 +1,13 @@
 import itertools
 import json
-import io
-from dotenv import load_dotenv
-import base64
 
+from dotenv import load_dotenv
 from tqdm import tqdm
 
-from angle_see.general import encode_image, cached_completion
+from angle_see.general import cached_completion, encode_image
 from angle_see.generate_simple_angle import generate_line_intersection_image
 
 load_dotenv()  # take environment variables from .env.
-
-def encode_image(image):
-    f = io.BytesIO()
-    image.save(f, format="PNG")
-    f.flush()
-    return base64.b64encode(f.getvalue())
 
 
 def turn(angle, answer=None, prompt_prefix=""):
@@ -57,7 +49,7 @@ The blue angle arc indicates the angle to pay attention to.
 Feel free to use as many tokens as you need to reason, but always give a final numerical answer in degrees inside <angle> tags, like this: 
         
 Lots of careful reasoning that leads me to think the angle is 10 degrees.
-<angle>10</angle>""", 
+<angle>10</angle>""",
     },
 ]
 
@@ -101,10 +93,14 @@ args = list(
             "gemini/gemini-1.5-pro-latest",
             "gemini/gemini-1.5-flash-latest",
         ],
-        [0, 1, 2], # 3 reps for each model
-        [13, 83, 102, 190, 203, 279, 325], # angles
-        [0.2, 0.4, 0.6, 0.8, 1.0], # temperatures
-        [0, 2, 8],  # each example is two (question and answer), so this is giving 0, 1 or 4 examples
+        [0, 1, 2],  # 3 reps for each model
+        [13, 83, 102, 190, 203, 279, 325],  # angles
+        [0.2, 0.4, 0.6, 0.8, 1.0],  # temperatures
+        [
+            0,
+            2,
+            8,
+        ],  # each example is two (question and answer), so this is giving 0, 1 or 4 examples
     )
 )
 
