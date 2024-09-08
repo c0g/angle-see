@@ -1,6 +1,7 @@
 import base64
 import io
 import json
+import time
 
 import diskcache as dc
 import litellm
@@ -33,6 +34,16 @@ def cached_completion(model, messages, temp, rep):
         {"model": model, "messages": messages, "temp": temp, "rep": rep}, sort_keys=True
     ).encode()
     if key not in cache:
-        response = litellm.completion(model=model, messages=messages, temperature=temp)
-        cache[key] = json.dumps(response.to_dict())
+        # print(key)
+        # re-try back off
+        for i in range(5):
+            try:
+                response = litellm.completion(model=model, messages=messages, temperature=temp)
+                cache[key] = json.dumps(response.to_dict())
+                break
+            except Exception as e:
+                print(e)
+                time.sleep(0.1)
+        else:
+            raise Exception("Failed to cache completion")
     return json.loads(cache[key])
